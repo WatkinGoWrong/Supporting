@@ -1,0 +1,31 @@
+4th Year project - Darren Watkin - 14517807
+
+Project consists of:
+	-Annotation Videos: Folder contains videos showing how annotation works
+	-App: Contains all routes and js files in relation to API calls
+	-Config: database for application
+	-css: Some css files for the application
+	-node_modules: contains node modules
+	-server.js: run this with node to run application
+	-vendor: contains all js files needed for the application
+
+To Use:
+
+To clone and run this repository you'll need [Git](https://git-scm.com), [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) and [MongoDB (https://docs.mongodb.com/getting-started/shell/installation/) ]installed on your computer. 
+
+```bash
+# Clone this repository
+git clone https://github.com/WatkinGoWrong/4thYearProject.git
+# Go into the repository
+cd 4thYearProject/SFG_project
+# Install dependencies
+npm install
+# open new tab in terminal or new terminal
+mongod —dbpath <your path to>/Project/SFG_project/config/db
+# go back to original terminal tab
+# Run the app
+npm start
+```
+Open browser to http://localhost:8000/SFL
+
+Any issues - contact me at Darren.watkin.2015@mumail.ie
