@@ -15,13 +15,13 @@ To clone and run this repository you'll need [Git](https://git-scm.com), [Node.j
 
 ```bash
 # Clone this repository
-git clone https://github.com/WatkinGoWrong/4thYearProject.git
+git clone https://github.com/WatkinGoWrong/Supporting.git
 # Go into the repository
-cd 4thYearProject/SFG_project
+cd Supporting
 # Install dependencies
 npm install
 # open new tab in terminal or new terminal
-mongod —dbpath <your path to>/Project/SFG_project/config/db
+mongod —dbpath <your path to>/Supporting/config/db
 # go back to original terminal tab
 # Run the app
 npm start
