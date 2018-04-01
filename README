@@ -20,11 +20,10 @@ git clone https://github.com/WatkinGoWrong/Supporting.git
 cd Supporting
 # Install dependencies
 npm install
-# open new tab in terminal or new terminal
-mongod —dbpath <your path to>/Supporting/config/db
-# go back to original terminal tab
 # Run the app
 npm start
+# open new tab in terminal or new terminal
+mongod —dbpath <your path to>/Supporting/config/db
 ```
 Open browser to http://localhost:8000/SFL
 
