@@ -23,7 +23,7 @@ var TreeNum = 0;
 var node_array = [];
 var node_sentence_array = [];
 var assignment_content = {};
-var sentence_check = ["[\"\",\"SENTENCE\"]", "[\"\",\"CLAUSE\"]", "[\"\",\"NGP\"]", "[\"\",\"SITUATION/CLAUSE\"]"]
+var sentence_check = ["[\"\",\"SENTENCE\"]", "[\"\",\"CLAUSE\"]", "[\"\",\"NGP\"]", "[\"\",\"SITUATION/CLAUSE\"]", "[\"\",\"NS\"]", "[\"\",\"ZS\"]"]
 
 //Bubble sorts node array according to starting annotation positions
 bubbleSortNode = function(a) {
@@ -80,20 +80,23 @@ window.onload = async function() {
 
   //used to load last saved sessions annotations
   //currently only shows highlights - need to add to arrays
-  if (new_obj.last_session[0] != '[]' || new_obj.last_session[0] != undefined) {
+  if (new_obj.last_session == undefined) {
+    var data;
+  } else if (new_obj.last_session[0] != '[]' || new_obj.last_session[0] != undefined) {
     var data = JSON.parse(new_obj.last_session);
 
-    if (data[1] != undefined) {
+    if (data[1] != undefined || data[1].quote != undefined) {
       if ((data[0].quote == data[1].quote) == true)
         data.shift();
     }
     obj = data;
-  } else {
-    var data;
   }
+  /*else {
+     var data;
+   }*/
 
   if (data == undefined) {
-
+    //data = new Array();
   } else {
     var data1 = new Array();
     var data2 = new Array();
@@ -171,6 +174,8 @@ createWholeTree = function() {
   if (sentence_check.indexOf((root_check.toUpperCase() > 1)))
     WholeTree[root_check] = WholeTree[""];
   delete WholeTree[""];
+
+  //console.log(JSON.stringify(WholeTree));
 }
 
 /*
@@ -210,6 +215,7 @@ Annotator.Plugin.fileStorage = function(element) {
             $(annotation.highlights).attr("id", "annotation_" + annotation.id);
             $(annotation.highlights).addClass("annotation_" + annotation.id);
             obj.push(annotation);
+            //console.log(annotation);
 
           }
 
@@ -238,8 +244,8 @@ Annotator.Plugin.fileStorage = function(element) {
         .subscribe("annotationDeleted", function(annotation) {
           // Check if the annotation actually exists (workaround annotatorjs bug #258).
           if (annotation.id) {
-            if ((((annotation.text).toUpperCase()).indexOf("[\"\",\"SENTENCE\"]") != -1 || ((annotation.text).toUpperCase()).indexOf("[\"\",\"CLAUSE\"]") != -1) || ((annotation.text).toUpperCase()).indexOf("[\"\",\"NGP\"]") != -1) {
-
+            //if ((((annotation.text).toUpperCase()).indexOf("[\"\",\"SENTENCE\"]") != -1 || ((annotation.text).toUpperCase()).indexOf("[\"\",\"CLAUSE\"]") != -1) || ((annotation.text).toUpperCase()).indexOf("[\"\",\"NGP\"]") != -1) {
+            if (sentence_check.indexOf((annotation.text).toUpperCase()) > -1) {
               for (var i = 0; i < node_sentence_array.length; i++) {
                 if (annotation.quote == node_sentence_array[i].quote) {
                   var elem = document.getElementById(node_sentence_array[i].id);
@@ -251,7 +257,7 @@ Annotator.Plugin.fileStorage = function(element) {
             } else {
 
               for (var i = 0; i < node_array.length; i++) {
-                if (annotation.quote == node_array[i].quote) {
+                if (annotation.id == node_array[i].id) {
                   node_array.splice(i, 1);
                 }
               }
@@ -268,12 +274,23 @@ Annotator.Plugin.fileStorage = function(element) {
           }
         })
         .subscribe("annotationUpdated", function(annotation) {
+          if (sentence_check.indexOf((annotation.text).toUpperCase()) > -1) {
 
-          //updating for OO struc
-          for (var i = 0; i < node_array.length; i++) {
-            if (annotation.id == node_array[i].id) {
-              node_array[i] = new node_obj(annotation.id, annotation.quote, annotation.text, annotation.ranges[0].startOffset, annotation.ranges[0].endOffset);
-              //node_array.splice(i, 1, node);
+            for (var i = 0; i < node_sentence_array.length; i++) {
+              if (annotation.quote == node_sentence_array[i].quote) {
+                //var elem = document.getElementById(node_sentence_array[i].id);
+                //elem.parentNode.removeChild(elem);
+                node_sentence_array[i] = new node_obj(annotation.id, annotation.quote, annotation.text, annotation.ranges[0].startOffset, annotation.ranges[0].endOffset);
+              }
+            }
+
+          } else {
+            //updating for OO struc
+            for (var i = 0; i < node_array.length; i++) {
+              if (annotation.id == node_array[i].id) {
+                node_array[i] = new node_obj(annotation.id, annotation.quote, annotation.text, annotation.ranges[0].startOffset, annotation.ranges[0].endOffset);
+                //node_array.splice(i, 1, node);
+              }
             }
           }
 

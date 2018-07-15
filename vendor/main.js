@@ -2,7 +2,7 @@
  *Main file that utilises all other js files to assemble and create the application
  *Refreshing of SVG element - removes previous tree
  *Distinguishes between drawing methods depending on the values of grading, adjust, teacher
- *Assembles all data to be stored to db - grade, tree, sentence, 
+ *Assembles all data to be stored to db - grade, tree, sentence,
  *
  */
 
@@ -115,8 +115,11 @@ function tree() {
             connection_type: "update",
             last_session: JSON.stringify(obj)
           }
+          //console.log(current_session);
           save_session(current_session);
           tree.nodes = await getTree(body);
+          //console.log(JSON.stringify(tree.nodes));
+          //console.log(tree.nodes);
         } else {
 
           tree.nodes = await getTree(body);

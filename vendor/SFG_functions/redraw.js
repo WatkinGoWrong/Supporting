@@ -7,7 +7,6 @@
  *Calls get functions to retrieve - links, nodes and triangle positions
  */
 
-
 var svgWidth = (document.getElementById('TreeArea').offsetWidth), // * .985,
   svgHeight = svgWidth / 2,
   devide = 1.2;
@@ -16,6 +15,20 @@ var fontsize = (svgWidth / 120) / devide,
   linkSpace = (fontsize) / devide,
   trainglepadding = (fontsize) / devide,
   stroke_width = (fontsize / 15) / devide;
+
+var maxLength = 10;
+var separation = 12;
+
+/*wordwrap2 = function(str, width, brk, cut) {
+  brk = brk || '\n';
+  width = width || 40;
+  cut = cut || false;
+  if (!str) {
+    return str;
+  }
+  var regex = '.{0,' + width + '}(\\s|$)' + (cut ? '|.{' + width + '}|.+$' : '|\\S+?(\\s|$)');
+  return str.match(RegExp(regex, 'g')).join(brk);
+};*/
 
 refresh = function() {
   d3.select('#nodes').selectAll('text').data(tree.getNodes()).exit().remove();
@@ -34,6 +47,7 @@ refresh_grade = function() {
 
 //Redraw normal tree - no grading
 redraw = function() {
+
   //console.log(devide);
   refresh();
   refresh_grade();
@@ -41,12 +55,22 @@ redraw = function() {
   var nodes = d3.select('#nodes').selectAll('text').data(tree.getNodes());
 
   nodes.text(function(node) {
+      /*var regex = '.{0,' + 1 + '}(\\s|$)' + (false ? '|.{' + 1 + '}|.+$' : '|\\S+?(\\s|$)');
+      var lines = (node.text).match(RegExp(regex, 'g')).join('\n');
+      //var lines = wordwrap2(this.name, 2).split('\n');
+      for (var i = 0; i < lines.length; i++) {
+        d3.select(this)
+          .append("tspan")
+          .attr("dy", 5)
+          .attr("x", 100)
+          .text(lines[i]);
+      }*/
       return node.text
     }) /*.transition().duration(500)*/
     .attr('x', function(node) {
       return node.x;
     }).attr('y', function(node) {
-      return node.y + 5;
+      return node.y;
     }) //5
     .attr('fill', function(node) {
       if (node.isLeaf) {
@@ -59,35 +83,43 @@ redraw = function() {
   nodes.enter().append('text').attr('id', function(node) { /*/ /////console.log.log('id = ' + node.id);*/
       return node.id;
     })
-    .attr('x', function(node) {
+    /*.attr('x', function(node) {
       return node.x;
     }).attr('y', function(node) {
       return node.y + 5;
-    })
-    .text(function(node) {
+    }).text*/
+    .each(function(node) {
+      //var regex = '.{0,' + 1 + '}(\\s|$)' + (false ? '|.{' + 1 + '}|.+$' : '|\\S+?(\\s|$)');
+      //var lines = (node.text).match(RegExp(regex, 'g')).join('\n');
+      var lines = [node.text];
+      if ((node.text).includes("|")) {
+        lines = (node.text).split("|");
+        lines.splice(1, 0, "_____");
+      }
+
+      //var lines = wordwrap2(this.name, 2).split('\n');
+      for (var i = 0; i < lines.length; i++) {
+        console.log(node)
+        d3.select(this)
+          .append("tspan")
+          .attr("y", node.y)
+          .attr("x", node.x)
+          .text(lines[i]);
+        node.y += (12 * i);
+      }
       return ((node.text).replace("\\", ""));
     })
     .attr('tWidth', function(node) {
       var n = tree.getNode(node);
-      //n.width = 40;
       n.tWidth = this.getBBox().width;
       return this.getBBox().width;
-      //return tree.getTextWidth(node);
-      //return 40;
     })
-    //Change font below
     .style({
       'text-anchor': 'middle',
       'cursor': 'pointer',
       'font-size': fontsize + 'px'
-    })
-    //.on('click', function (node) { if (d3.event.shiftKey) { return tree.changeText(node); } else if (d3.event.ctrlKey) { return tree.removeLeaf(node); } else { return tree.addLeaf(node.id); } })
-    //.transition().duration(500) * /
-    .attr('x', function(node) {
-      return node.x;
-    }).attr('y', function(node) {
-      return node.y + 5;
     });
+
 
 
   var links = d3.select('#links').selectAll('line').data(tree.getLinks());
@@ -120,12 +152,7 @@ redraw = function() {
       'stroke': 'black',
       'stroke-width': stroke_width + 'px'
     }) //'stroke-dasharray': 5 , -- Use for showing error in comparison
-    /*.transition().duration(500)*/
-    .attr('x2', function(link) {
-      return link.toX;
-    }).attr('y2', function(link) {
-      return link.toY - linkSpace;
-    });
+
 
 
   var triangles = d3.select('#triangles').selectAll('polygon').data(tree.getTriangles());

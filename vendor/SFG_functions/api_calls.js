@@ -82,7 +82,7 @@ getStudentSFL_db = function() {
 }
 
 postSFL_db = function(object) {
-  //console.log(object);
+  console.log(object);
 
   return new Promise(function(resolve, reject) {
     $.post(
@@ -105,6 +105,7 @@ postSFL_db = function(object) {
 }
 
 save_session = function(object) {
+  console.log(object);
   return new Promise(function(resolve, reject) {
     $.post(
       port2 + "mydb_save", {

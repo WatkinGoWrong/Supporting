@@ -122,7 +122,7 @@ module.exports = function(app, db) {
   });
 
 
-  //WAsmnt used as caused error - need to look into
+  //Wasnt used as caused error - need to look into
   /*app.get('/:id', function(req, res) {
     // First read existing users.
     var teacher;
