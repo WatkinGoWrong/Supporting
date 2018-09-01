@@ -9,6 +9,17 @@
 var port = "http://192.168.1.10:8000/"
 var port2 = "http://localhost:8000/"
 
+updateTeacher = function() {
+  return new Promise(function(resolve, reject) {
+    $.post(
+      port2 + "teacherSFLTrees", {},
+      function(data) {
+        resolve(data);
+      }
+    );
+  });
+}
+
 getGrade = function(body, sentence) {
   var grade;
   return new Promise(function(resolve, reject) {
@@ -81,19 +92,38 @@ getStudentSFL_db = function() {
   });
 }
 
-postSFL_db = function(object) {
+postToStudent = function(object) {
   console.log(object);
 
   return new Promise(function(resolve, reject) {
     $.post(
-      port2 + "mydb", {
+      port2 + "student", {
         key: object.key,
         id: object.id,
         value: object.value,
-        collection: object.collection,
         connection_type: object.connection_type,
         annotations: object.annotations, //,
         last_session: object.last_session
+      },
+
+      function(data) {
+        var res = data;
+        resolve(res);
+      }
+    );
+  });
+}
+
+postToTeacher = function(object) {
+  console.log(object);
+
+  return new Promise(function(resolve, reject) {
+    $.post(
+      port2 + "teacher", {
+        key: object.key,
+        id: object.id,
+        value: "[" + object.value + "]",
+        connection_type: object.connection_type,
       },
 
       function(data) {

@@ -7,6 +7,8 @@ var treeStruc = require("./treeStruc");
 var grading = require("./grading");
 var SFL_trees = require("./exampleTrees");
 var data = require("./db_api");
+const MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017";
 
 //var ObjectID = require('mongodb').ObjectID;
 module.exports = function(app, db) {
@@ -33,10 +35,12 @@ module.exports = function(app, db) {
       title: req.body.title
     };
     ////console.log(req.body.teacher);
+    //console.log(getTeacherSFL(req.body.sentence));
 
     var student = JSON.stringify(req.body.body).slice(1, -1).replace(/\\/g, "");
     var teacher = SFL_trees.examples[(req.body.sentence).split(' ').join('').toLowerCase()]; //JSON.stringify(req.body.teacher).slice(1, -1).replace(/\\/g, "");
-    //console.log("SFL Graded!");
+    console
+    console.log(teacher);
     if (teacher == undefined)
       res.send(["", "", "", "", ""])
     else
@@ -53,4 +57,18 @@ module.exports = function(app, db) {
     //console.log(SFLs);
     res.send(SFLs);
   });
+
+  app.post('/teacherSFLTrees/', (req, res) => {
+    MongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+      var dbo = db.db("mydb");
+      dbo.collection("teacher").findOne({}, function(err, result) {
+        if (err) throw err;
+        db.close();
+        SFL_trees.examples = result;
+        res.send();
+      });
+    });
+  });
+
 };

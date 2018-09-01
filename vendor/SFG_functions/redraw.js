@@ -96,16 +96,20 @@ redraw = function() {
         lines = (node.text).split("|");
         lines.splice(1, 0, "_____");
       }
-
       //var lines = wordwrap2(this.name, 2).split('\n');
       for (var i = 0; i < lines.length; i++) {
-        console.log(node)
+        var plus = 0;
+        if (i != 0) {
+          if (lines[i] == "_____") {
+            plus = 10;
+          }
+        }
         d3.select(this)
           .append("tspan")
           .attr("y", node.y)
           .attr("x", node.x)
           .text(lines[i]);
-        node.y += (12 * i);
+        node.y += (3 + plus);
       }
       return ((node.text).replace("\\", ""));
     })
@@ -204,29 +208,50 @@ redraw_grade = function() {
     }
   }); //red/blue
 
-  nodes.enter().append('text').attr('id', function(node) { /*//console.log('id = ' + node.id);*/
+  nodes.enter().append('text').attr('id', function(node) { /*/ /////console.log.log('id = ' + node.id);*/
       return node.id;
-    }).attr('x', function(node) {
+    })
+    /*.attr('x', function(node) {
       return node.x;
     }).attr('y', function(node) {
       return node.y + 5;
-    }).text(function(node) {
-      return (node.text).replace("\\", "");
-    }).attr('tWidth', function(node) {
+    }).text*/
+    .each(function(node) {
+      //var regex = '.{0,' + 1 + '}(\\s|$)' + (false ? '|.{' + 1 + '}|.+$' : '|\\S+?(\\s|$)');
+      //var lines = (node.text).match(RegExp(regex, 'g')).join('\n');
+      var lines = [node.text];
+      if ((node.text).includes("|")) {
+        lines = (node.text).split("|");
+        lines.splice(1, 0, "_____");
+      }
+      //var lines = wordwrap2(this.name, 2).split('\n');
+      for (var i = 0; i < lines.length; i++) {
+        var plus = 0;
+        if (i != 0) {
+          if (lines[i] == "_____") {
+            plus = 10;
+          }
+        }
+        d3.select(this)
+          .append("tspan")
+          .attr("y", node.y)
+          .attr("x", node.x)
+          .text(lines[i]);
+        node.y += (3 + plus);
+      }
+      return ((node.text).replace("\\", ""));
+    })
+    .attr('tWidth', function(node) {
       var n = tree.getNode(node);
       n.tWidth = this.getBBox().width;
       return this.getBBox().width;
     })
-    //Change font below
     .style({
       'text-anchor': 'middle',
       'cursor': 'pointer',
       'font-size': fontsize + 'px'
-    }).attr('x', function(node) {
-      return node.x;
-    }).attr('y', function(node) {
-      return node.y + 5;
     });
+
 
   var nodes = d3.select('#nodes_2').selectAll('text').data(tree.getincorrectNodes());
 
@@ -246,32 +271,52 @@ redraw_grade = function() {
     }
   }); //red/blue
 
-  nodes.enter().append('text').attr('id', function(node) { /*//console.log('id = ' + node.id);*/
+  nodes.enter().append('text').attr('id', function(node) { /*/ /////console.log.log('id = ' + node.id);*/
       return node.id;
-    }).attr('x', function(node) {
+    })
+    /*.attr('x', function(node) {
       return node.x;
     }).attr('y', function(node) {
       return node.y + 5;
-    }).text(function(node) {
-      return (node.text).replace("\\", "");
-    }).attr('tWidth', function(node) {
+    }).text*/
+    .each(function(node) {
+      //var regex = '.{0,' + 1 + '}(\\s|$)' + (false ? '|.{' + 1 + '}|.+$' : '|\\S+?(\\s|$)');
+      //var lines = (node.text).match(RegExp(regex, 'g')).join('\n');
+      var lines = [node.text];
+      if ((node.text).includes("|")) {
+        lines = (node.text).split("|");
+        lines.splice(1, 0, "_____");
+      }
+      //var lines = wordwrap2(this.name, 2).split('\n');
+      for (var i = 0; i < lines.length; i++) {
+        var plus = 0;
+        if (i != 0) {
+          if (lines[i] == "_____") {
+            plus = 10;
+          }
+        }
+        d3.select(this)
+          .append("tspan")
+          .attr("y", node.y)
+          .attr("x", node.x)
+          .text(lines[i]);
+        node.y += (3 + plus);
+      }
+      return ((node.text).replace("\\", ""));
+    })
+    .attr('tWidth', function(node) {
       var n = tree.getNode(node);
       n.tWidth = this.getBBox().width;
-      ////console.log(n.tWidth);
       return this.getBBox().width;
     })
-    //Change font below
     .style({
       'text-anchor': 'middle',
       'cursor': 'pointer',
       'font-size': fontsize + 'px',
       'font-weight': 'bold',
       'font-style': 'italic'
-    }).attr('x', function(node) {
-      return node.x;
-    }).attr('y', function(node) {
-      return node.y + 5;
     });
+
   //var links = [];
   var links = d3.select('#links_3').selectAll('line').data(tree.getcorrectLinks());
   ////console.log("links>>", links);

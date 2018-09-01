@@ -9,14 +9,27 @@
 
 $(function() {
   $("#save").click(async function(e) {
-    var current_session = {
-      id: 1,
-      collection: "student",
-      connection_type: "update",
-      last_session: JSON.stringify(obj)
+    if (teacher == false) {
+      var current_session = {
+        id: 1,
+        collection: "student",
+        connection_type: "update",
+        last_session: JSON.stringify(obj)
+      }
+      e.preventDefault();
+      await save_session(current_session);
+    } else {
+      var teacher_SFLs = await getTeacherSFL_db();
+      var curSFl = JSON.stringify(tree.nodes[0]);
+      var curObj = {
+        id: 1,
+        key: sentence,
+        connection_type: "update",
+        value: curSFl
+      }
+      e.preventDefault();
+      await postToTeacher(curObj);
     }
-    e.preventDefault();
-    await save_session(current_session);
   });
 });
 
@@ -100,13 +113,6 @@ $(function() {
       tree.w = (svgHeight / 4) / devide;
       tree.h = (svgHeight / 10) / devide;
     }
-    e.preventDefault();
-  });
-});
-
-$(function() {
-  $("#storeSFL").click(async function() {
-    var result = await storeSFL(assignment_content);
     e.preventDefault();
   });
 });

@@ -25,6 +25,7 @@ var in_diff_array = [];
 var sentence_adjust = "";
 
 function tree() {
+  updateTeacher();
 
   /*var node_count = 0;
   var previous_x = 0;*/
@@ -79,28 +80,12 @@ function tree() {
 
       }
 
-      /*student_segmented_sentence = [];
-      getBottomNodes(tree.nodes[0]);
-      student_segmented_sentence = student_segmented_sentence.join(" ").split(" ").join("");
-      console.log(student_segmented_sentence);
-      if (sentence.length == student_segmented_sentence.length)
-        $("#gradeSFG").show();
-      else {
-        $("#gradeSFG").hide();
-        $("#gradeSFG").html("Grade (Off)");
-        grading = false
-      }*/
-      //if (document.getElementById('tree-' + num) == null) {
-
       // issue with d3 and deleting elements - redraw, delete div and re-create div
       document.getElementById("tree-" + num).remove();
       var div = document.createElement("div");
       div.setAttribute("id", "tree-" + num);
       document.getElementById("TreeArea").appendChild(div);
       initialise(num);
-
-      //}
-
 
       body = JSON.stringify(WholeTree)
       SFL_node_pos = [];
@@ -122,6 +107,7 @@ function tree() {
           //console.log(tree.nodes);
         } else {
 
+          console.log(sentence);
           tree.nodes = await getTree(body);
 
           grade = await getGrade(JSON.stringify(tree.nodes), sentence);
@@ -145,16 +131,15 @@ function tree() {
             "SFL": tree.nodes[0],
           }
 
-          var total_SFL = {
+          var SFL_Tree = {
             id: 1,
             key: sentence,
             value: assignment_content,
-            collection: "student",
             connection_type: "update",
             annotations: node_array,
             last_session: JSON.stringify(obj)
           }
-          await postSFL_db(total_SFL);
+          await postToStudent(SFL_Tree);
         }
 
         if (adjust) {

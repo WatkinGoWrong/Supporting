@@ -10,70 +10,77 @@ var url = "mongodb://localhost:27017"; //mongodb://localhost:27017/";
 
 module.exports = function(app, db) {
 
-  //handles all insert,update posts to db
-  app.post('/mydb/', (req, res) => {
-    var key = req.body.key;
-    var id = req.body.id;
-    var value = req.body.value;
-    var collection = req.body.collection; //student , teacher
-    var connection_type = req.body.connection_type;
-    var annotations = req.body.annotations;
-    var last_session = req.body.last_session;
+  app.post('/teacher/', (req, res) => {
 
     var myobj = [{
-      _id: id,
-      [key]: value
+      _id: req.body.id,
+      [req.body.key]: req.body.value
+    }];
+    MongoClient.connect(url, function(err, db) {
+
+      if (err) throw err;
+      var dbo = db.db("mydb");
+
+      if (req.body.connection_type == "insert") {
+        dbo.collection("teacher").insertMany(myobj, function(err, res) {
+          if (err) throw err;
+          db.close();
+        });
+      } else if (req.body.connection_type == "update") {
+        var myquery = {
+          _id: req.body.id
+        };
+        var newvalues = {
+          $set: {
+            _id: req.body.id,
+            [req.body.key]: req.body.value,
+          }
+        };
+        dbo.collection("teacher").updateOne(myquery, newvalues, function(err, res) {
+          if (err) throw err;
+          db.close();
+        });
+      }
+    });
+    res.send(req.body.connection_type + "d " + req.body.key + " in teacher");
+  });
+
+
+  app.post('/student/', (req, res) => {
+    var myobj = [{
+      _id: req.body.id,
+      [req.body.key]: req.body.value
     }];
 
-    if (collection == "student" || collection == "teacher") {
+    MongoClient.connect(url, function(err, db) {
 
-      MongoClient.connect(url, function(err, db) {
-        if (err) throw err;
-        var dbo = db.db("mydb");
-        if (connection_type == "insert") {
-          //console.log("insert");
-          dbo.collection(collection).insertMany(myobj, function(err, res) {
-            if (err) throw err;
-            //console.log("Number of documents inserted: " + res.insertedCount);
-            test++;
-            db.close();
-          });
-        } else if (connection_type == "update") {
-          //console.log("update");
+      if (err) throw err;
+      var dbo = db.db("mydb");
 
-          var myquery = {
-            _id: id
-          };
-
-          if (collection == "teacher") {
-            var newvalues = {
-              $set: {
-                _id: id,
-                [key]: value,
-              }
-            };
-          } else {
-            var newvalues = {
-              $set: {
-                _id: id,
-                [key]: value,
-                annotations: [annotations],
-                last_session: [last_session]
-              }
-            };
+      if (req.body.connection_type == "insert") {
+        dbo.collection("student").insertMany(myobj, function(err, res) {
+          if (err) throw err;
+          db.close();
+        });
+      } else if (req.body.connection_type == "update") {
+        var myquery = {
+          _id: req.body.id
+        };
+        var newvalues = {
+          $set: {
+            _id: req.body.id,
+            [req.body.key]: req.body.value,
+            annotations: [req.body.annotations],
+            last_session: [req.body.last_session]
           }
-
-          dbo.collection(collection).updateOne(myquery, newvalues, function(err, res) {
-            if (err) throw err;
-            //console.log("1 document updated");
-            db.close();
-          });
-        }
-      });
-      res.send();
-    } else {
-      res.send("Error - collection doesn't exist")
-    }
+        };
+        dbo.collection("student").updateOne(myquery, newvalues, function(err, res) {
+          if (err) throw err;
+          db.close();
+        });
+      }
+    });
+    res.send(req.body.connection_type + "d " + req.body.key + " in student");
   });
 
   //save data to db - used for annotation saving
@@ -87,18 +94,17 @@ module.exports = function(app, db) {
       var dbo = db.db("mydb");
 
       var myquery = {
-        _id: id
+        _id: req.body.id
       };
 
       var newvalues = {
         $set: {
-          _id: id,
-          last_session: [last_session]
+          _id: req.body.id,
+          last_session: [req.body.last_session]
         }
       };
-      dbo.collection(collection).updateOne(myquery, newvalues, function(err, res) {
+      dbo.collection(req.body.collection).updateOne(myquery, newvalues, function(err, res) {
         if (err) throw err;
-        ////console.log("1 document updated");
         db.close();
       });
     });

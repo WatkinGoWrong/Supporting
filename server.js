@@ -35,3 +35,9 @@ app.get('/SFL', function(req, res) {
   console.log('Date:', date.getDay() + '/' + date.getMonth() + '/' + date.getYear(), 'Time:', date.getHours() + ':' + date.getMinutes());
   res.sendFile(__dirname + "/" + "SFL_Anno.html"); //SFL_Anno
 });
+
+app.get('/SFL_new', function(req, res) {
+  var date = new Date();
+  console.log('Date:', date.getDay() + '/' + date.getMonth() + '/' + date.getYear(), 'Time:', date.getHours() + ':' + date.getMinutes());
+  res.sendFile(__dirname + "/" + "test_newSFL.html"); //SFL_Anno
+});

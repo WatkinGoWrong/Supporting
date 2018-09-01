@@ -84,7 +84,7 @@ tree.getTriangles = function() {
           fromId: node.id,
           toId: kid.id,
           topX: node.x,
-          topY: (node.y + 15),
+          topY: (node.y + 20),
           leftX: (kid.x - (kid.tWidth / 3)),
           leftY: (kid.y - 10),
           rightX: (kid.x + (kid.tWidth / 3)),
@@ -172,10 +172,10 @@ function getcorrectLinks(node, l) {
         l.push({
           fromId: node.id,
           fromX: node.x,
-          fromY: node.y,
+          fromY: node.y + 12,
           toId: kid.id,
           toX: kid.x,
-          toY: kid.y,
+          toY: kid.y - 4
         });
       }
     }
@@ -195,10 +195,10 @@ tree.getincorrectLinks = function() {
           l_in.push({
             fromId: node.id,
             fromX: node.x,
-            fromY: node.y,
+            fromY: node.y + 12,
             toId: kid.id,
             toX: kid.x,
-            toY: kid.y,
+            toY: kid.y - 4
           });
         }
       }
@@ -227,7 +227,7 @@ tree.getcorrectTriangles = function() {
             fromId: node.id,
             toId: kid.id,
             topX: node.x,
-            topY: (node.y + 10),
+            topY: (node.y + 20),
             leftX: (kid.x - (kid.tWidth / 3)),
             leftY: (kid.y - 10),
             rightX: (kid.x + (kid.tWidth / 3)),
@@ -257,7 +257,7 @@ tree.getincorrectTriangles = function() {
             fromId: node.id,
             toId: kid.id,
             topX: node.x,
-            topY: (node.y + 10),
+            topY: (node.y + 20),
             leftX: (kid.x - (kid.tWidth / 3)),
             leftY: (kid.y - 10),
             rightX: (kid.x + (kid.tWidth / 3)),
