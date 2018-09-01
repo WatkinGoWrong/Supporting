@@ -39,7 +39,6 @@ module.exports = function(app, db) {
 
     var student = JSON.stringify(req.body.body).slice(1, -1).replace(/\\/g, "");
     var teacher = SFL_trees.examples[(req.body.sentence).split(' ').join('').toLowerCase()]; //JSON.stringify(req.body.teacher).slice(1, -1).replace(/\\/g, "");
-    console
     console.log(teacher);
     if (teacher == undefined)
       res.send(["", "", "", "", ""])
