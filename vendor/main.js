@@ -63,6 +63,7 @@ function tree() {
           redraw();
         }
 
+        updateTeacher();
         document.getElementById("progress-bar").innerHTML = 0 + '%';
         document.getElementById("progress-bar").style.width = 0 + '%';
 
